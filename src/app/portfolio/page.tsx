@@ -1,20 +1,15 @@
-'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Вече присъства, но е важно за client-side компоненти.
+// src/app/portfolio/page.tsx
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи react-modal-image.
 
-// import Image from 'next/image'; // Не е нужно директно, ModalImage го управлява
-import ModalImage from 'react-modal-image'; // <-- НОВ ИМПОРТ: За галерията
-import { useState } from 'react'; // useState е още нужен, ако имаш други състояния, но за модала вече не.
-
-// Важно: metadata е изнесена в src/app/head.tsx, както поправихме преди
-// import type { Metadata } from 'next';
-// export const metadata: Metadata = { ... };
+import ModalImage from 'react-modal-image'; // <-- ИМПОРТ ЗА ГАЛЕРИЯТА
 
 const portfolioItems = [
   {
     id: 1,
     name: 'Прототип на AirSoft',
     description: 'Функционален прототип, принтиран за тестване на сглобката и ергономията.',
-    smallImage: '/images/airsoft-replica.jpg', // <-- ПРОМЕНЕНО: Добавяме smallImage за preview
-    largeImage: '/images/airsoft-replica.jpg', // <-- НОВО: largeImage за уголемена версия
+    smallImage: '/images/airsoft-replica.jpg', // <-- Път към малката (preview) снимка
+    largeImage: '/images/airsoft-replica.jpg', // <-- Път към голямата (пълноразмерна) снимка
     category: 'Прототипи',
   },
   {
@@ -40,10 +35,6 @@ const portfolioItems = [
 ];
 
 export default function PortfolioPage() {
-  // useState за модала вече не е нужен тук, тъй като ModalImage го управлява
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [currentImage, setCurrentImage] = useState({ url: '', alt: '' });
-
   return (
     <div className="container mx-auto p-4 py-8">
       <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
@@ -62,17 +53,17 @@ export default function PortfolioPage() {
                        h-80 md:h-96" // Фиксирана височина за картата
           >
             {/* Изображението: Сега използваме ModalImage */}
-            <div className="absolute inset-0 w-full h-full"> {/* Покрива целия родител */}
+            <div className="absolute inset-0 w-full h-full">
               <ModalImage
                 small={item.smallImage} // <-- Път към малката (preview) снимка
                 large={item.largeImage} // <-- Път към голямата (пълноразмерна) снимка
                 alt={item.name}
                 hideDownload={true} // Може да скриеш бутона за сваляне
-                hideZoom={false}    // Може да оставиш бутона за zoom, ако го искаш
+                hideZoom={false}    // Може да оставиш бутона за zoom
                 // Tailwind класове за стилизиране на *превю* изображението
                 className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
               />
-              {/* Overlay, който се появява при hover, за да затъмни снимката леко */}
+              {/* Overlay, който се появява при hover */}
               <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
             </div>
 
