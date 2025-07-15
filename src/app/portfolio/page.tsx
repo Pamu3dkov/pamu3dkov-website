@@ -1,7 +1,13 @@
 // src/app/portfolio/page.tsx
-'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи react-modal-image.
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи react-modal-image и другите интерактивности.
 
-import ModalImage from 'react-modal-image'; // <-- ИМПОРТ ЗА ГАЛЕРИЯТА
+// *** ПРОМЯНА ТУК: Добавяме dynamic от 'next/dynamic' ***
+import dynamic from 'next/dynamic';
+
+// *** ПРОМЯНА ТУК: Използваме dynamic импорт за ModalImage ***
+// Това кара ModalImage да се зарежда само на клиентската страна (браузъра)
+// и да не се опитва да се рендва по време на Server-Side Rendering (SSR).
+const ModalImage = dynamic(() => import('react-modal-image'), { ssr: false });
 
 const portfolioItems = [
   {
@@ -14,7 +20,7 @@ const portfolioItems = [
   },
   {
     id: 2,
-    name: 'Персонализирана фигурка',
+    name: 'Персонализирана декоративна фигурка',
     description: 'Детайлна фигурка, принтирана като краен продукт за подарък.',
     smallImage: '/images/drakon.jpg',
     largeImage: '/images/drakon.jpg',
