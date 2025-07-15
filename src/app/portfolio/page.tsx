@@ -33,6 +33,15 @@ const portfolioItems = [
     category: 'Крайни продукти',
     objectPosition: 'object-center', // Добавено свойство: центрира снимката по подразбиране
   },
+  {
+  id: 3,
+    name: 'Фасунга за фар на кола',
+    description: 'Специализирана резервна част, проектирана със SolidWorks.',
+    smallImage: '/images/part1.jpg',
+    largeImage: '/images/part1.jpg',
+    category: 'Проектирани продукти',
+    objectPosition: 'object-center', // Добавено свойство: центрира снимката по подразбиране
+  },
   // Добави тук още обекти със снимките от твоя public/images/ папка.
   // За всяка снимка можеш да зададеш custom objectPosition.
   // Ето пример за нова снимка с bottom позиция:
