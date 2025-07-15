@@ -1,7 +1,10 @@
 // src/app/layout.tsx
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Добавяме този ред, защото използваме useState и интерактивност
+
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import { useState } from 'react'; // <-- Добавяме импорт за useState
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,6 +18,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // <-- Ново състояние за мобилното меню
+
   return (
     <html lang="bg">
       <body className={inter.className}>
@@ -33,8 +38,28 @@ export default function RootLayout({
               kov
             </Link>
 
-            {/* Навигационни линкове */}
-            <ul className="flex space-x-8 text-lg">
+            {/* Хамбургер бутон за мобилни устройства */}
+            <div className="md:hidden"> {/* Видим само на екрани по-малки от 'md' */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} // При клик променя състоянието
+                className="text-white focus:outline-none"
+                aria-label="Toggle mobile menu" // Добавяме за достъпност
+              >
+                {/* Икона за хамбургер (три черти) или затваряне (Х) */}
+                {isMobileMenuOpen ? (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                )}
+              </button>
+            </div>
+
+            {/* Десктоп навигационни линкове (скрити на малки екрани) */}
+            <ul className="hidden md:flex space-x-8 text-lg"> {/* Скрити на екрани по-малки от 'md' */}
               <li>
                 <Link href="/" className="relative group overflow-hidden">
                   <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Начало</span>
@@ -61,6 +86,24 @@ export default function RootLayout({
               </li>
             </ul>
           </nav>
+
+          {/* Мобилно меню (показва се/скрива се в зависимост от isMobileMenuOpen) */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Начало
+              </Link>
+              <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Услуги
+              </Link>
+              <Link href="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Портфолио
+              </Link>
+              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Контакти
+              </Link>
+            </div>
+          )}
         </header>
         {/* ---- Край на "Бруталния" Header ---- */}
 
