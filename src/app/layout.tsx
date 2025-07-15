@@ -8,10 +8,8 @@ import { useState } from 'react'; // <-- Добавяме импорт за useS
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Pamu3dkov - 3D Принтиране и Моделиране',
-  description: 'Предлагаме висококачествени услуги за 3D принтиране и моделиране по поръчка. Превърнете вашите идеи в реалност.',
-};
+// !!! ВАЖНО: Блокът "export const metadata" е премахнат оттук.
+// !!! Трябва да го преместите в src/app/head.tsx (вижте инструкциите по-долу).
 
 export default function RootLayout({
   children,
