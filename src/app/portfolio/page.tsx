@@ -22,7 +22,7 @@ const portfolioItems = [
     smallImage: '/images/drakon.jpg',
     largeImage: '/images/drakon.jpg',
     category: 'Крайни продукти',
-    objectPosition: 'object-top', // Добавено свойство: позиционира снимката отгоре за дракона
+    objectPosition: 'object-center', // Добавено свойство: позиционира снимката отгоре за дракона
   },
   {
     id: 3,
