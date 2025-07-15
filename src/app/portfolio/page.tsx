@@ -1,15 +1,10 @@
 // src/app/portfolio/page.tsx
 'use client';
 
-// ИМПОРТИРАМЕ useState ОТ REACT ЗА УПРАВЛЕНИЕ НА СЪСТОЯНИЕТО НА МОДАЛА
-import { useState } from 'react';
-// ИМПОРТИРАМЕ yet-another-react-lightbox ЗА ЛАЙТБОКС ФУНКЦИОНАЛНОСТТА
+import { useState, useRef, useEffect } from 'react'; // Добавени useEffect и useRef
 import Lightbox from 'yet-another-react-lightbox';
-// ИМПОРТИРАМЕ НЕЙНИТЕ ОСНОВНИ CSS СТИЛОВЕ
 import 'yet-another-react-lightbox/styles.css';
 
-// Дефиниция на елементите в портфолиото.
-// Добавен е 'id' за уникален ключ и 'smallImage'/'largeImage' за различните размери.
 const portfolioItems = [
   {
     id: 1, // Уникален идентификатор
@@ -36,23 +31,86 @@ const portfolioItems = [
     category: 'Крайни продукти',
   },
   // Добави тук още обекти със снимките от твоя public/images/ папка.
-  // За най-добър перформанс, използвай по-малки версии за 'smallImage' и пълни размери за 'largeImage'.
 ];
 
 export default function PortfolioPage() {
-  // Състояние, което контролира дали лайтбоксът е отворен или затворен
   const [isOpen, setIsOpen] = useState(false);
-  // Състояние, което държи индекса на текущата снимка, която да се показва в лайтбокса
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [touchedCardId, setTouchedCardId] = useState<number | null>(null);
 
-  // Подготвяме масив от слайдове, както 'yet-another-react-lightbox' очаква.
-  // Всеки слайд трябва да има 'src' (URL на снимката) и може да има други метаданни.
+  // Референция за таймаута, за да може да го изчистваме
+  const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const slides = portfolioItems.map(item => ({
     src: item.largeImage,
-    alt: item.name, // Алтернативен текст за достъпност
-    title: item.name, // Заглавие, което може да се показва в лайтбокса
-    description: item.description, // Описание, ако се използва плъгин за описание
+    alt: item.name,
+    title: item.name,
+    description: item.description,
   }));
+
+  // Функция, която управлява взаимодействията с картите (клик/докосване)
+  const handleCardInteraction = (itemIndex: number, itemId: number) => {
+    // Проверяваме дали устройството поддържа тъч събития
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    if (isTouchDevice) {
+      // Логика за мобилни устройства:
+      if (touchedCardId === itemId) {
+        // Ако картата вече е била докосната (т.е. е в "hover" състояние),
+        // второто докосване отваря лайтбокса.
+        setPhotoIndex(itemIndex);
+        setIsOpen(true);
+        setTouchedCardId(null); // Скриваме "hover" ефекта след отваряне на лайтбокс
+        if (touchTimeoutRef.current) {
+          clearTimeout(touchTimeoutRef.current);
+          touchTimeoutRef.current = null;
+        }
+      } else {
+        // Първо докосване на карта -> активираме "hover" ефекта
+        setTouchedCardId(itemId);
+        // Изчистваме предишен таймаут, ако има такъв
+        if (touchTimeoutRef.current) {
+          clearTimeout(touchTimeoutRef.current);
+        }
+        // Задаваме таймаут, който да скрие "hover" ефекта след 3 секунди,
+        // ако няма второ докосване или докосване извън картата.
+        touchTimeoutRef.current = setTimeout(() => {
+          setTouchedCardId(null);
+        }, 3000); // 3 секунди
+      }
+    } else {
+      // Логика за десктоп устройства:
+      // На десктоп "hover" ефектът се управлява изцяло от CSS (group-hover).
+      // Единственият "клик" отваря лайтбокса.
+      setPhotoIndex(itemIndex);
+      setIsOpen(true);
+    }
+  };
+
+  // useEffect за добавяне на слушател на събития за тялото на документа.
+  // Това помага да скрием "hover" ефекта на мобилни устройства,
+  // ако потребителят докосне извън активна карта.
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      // Проверяваме дали има активна "докосната" карта и дали кликът е бил извън нея
+      const clickedOnCard = (event.target as HTMLElement).closest('.portfolio-card');
+      if (touchedCardId !== null && !clickedOnCard) {
+        setTouchedCardId(null);
+        if (touchTimeoutRef.current) {
+          clearTimeout(touchTimeoutRef.current);
+          touchTimeoutRef.current = null;
+        }
+      }
+    };
+
+    // Добавяме слушател за 'mousedown' (по-рано от 'click', за да хване събитието преди да се активира клик на картата)
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    // Функцията за почистване (когато компонентът се демонтира)
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [touchedCardId]); // Задейства се, когато touchedCardId се промени
 
   return (
     <div className="container mx-auto p-4 py-8">
@@ -66,32 +124,42 @@ export default function PortfolioPage() {
       {/* Grid оформлението за картичките с проекти */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {portfolioItems.map((item, index) => (
-          // Всяка карта е кликаема и отваря лайтбокс
           <div
             key={item.id}
-            className="group relative bg-white rounded-lg shadow-lg overflow-hidden
-                       h-80 md:h-96 cursor-pointer" // Добавен 'cursor-pointer' за по-добра UX
-            onClick={() => {
-              setPhotoIndex(index); // Задаваме индекса на кликнатата снимка
-              setIsOpen(true);      // Отваряме лайтбокса
-            }}
+            className={`
+              group relative bg-white rounded-lg shadow-lg overflow-hidden
+              h-80 md:h-96 cursor-pointer
+              portfolio-card // Добавяме този клас за по-лесно разпознаване при клик извън карта
+            `}
+            onClick={() => handleCardInteraction(index, item.id)}
           >
             {/* Контейнер за изображението, който покрива цялата карта */}
             <div className="absolute inset-0 w-full h-full">
               <img
                 src={item.smallImage} // Използваме малката снимка за превю в картата
                 alt={item.name}
-                // Tailwind класове за стилизиране и анимиране при hover
-                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+                className={`
+                  w-full h-full object-cover transition-transform duration-300 ease-in-out
+                  group-hover:scale-110 // Ховър ефект за десктоп
+                  ${touchedCardId === item.id ? 'scale-110' : ''} // Ефект при първо докосване на мобилен
+                `}
               />
               {/* Полупрозрачен overlay, който се появява при hover */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
+              <div className={`
+                absolute inset-0 bg-black transition-opacity duration-300 z-10
+                group-hover:opacity-20 // Ховър overlay за десктоп
+                ${touchedCardId === item.id ? 'opacity-20' : 'opacity-0'} // Overlay при първо докосване на мобилен
+              `}></div>
             </div>
 
             {/* Текстовият блок с името и описанието на проекта */}
             <div
-              className="absolute bottom-0 left-0 right-0 p-6 bg-white z-20
-                         transition-opacity duration-300 ease-in-out group-hover:opacity-0"
+              className={`
+                absolute bottom-0 left-0 right-0 p-6 bg-white z-20
+                transition-opacity duration-300 ease-in-out
+                group-hover:opacity-0 // Скриване на текст при ховър за десктоп
+                ${touchedCardId === item.id ? 'opacity-0' : ''} // Скриване на текст при първо докосване на мобилен
+              `}
             >
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">{item.name}</h2>
               <p className="text-gray-600 mb-3">{item.description}</p>
