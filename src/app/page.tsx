@@ -1,6 +1,6 @@
 // src/app/page.tsx
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from 'next/image'; // Увери се, че Image е импортиран
 
 export default function HomePage() {
   return (
@@ -30,17 +30,40 @@ export default function HomePage() {
           Какво предлагаме?
         </h2>
         <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
+          <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center"> {/* Добавих items-center */}
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Прототипиране</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-6 text-center"> {/* Добавих text-center и mb-6 */}
               Превърнете вашите концепции в реални, осезаеми прототипи. Идеален начин да тествате дизайна си преди масово производство.
             </p>
+            {/* Добавяне на снимка за Прототипиране */}
+            <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-lg shadow-md">
+              <Image
+                src="/images/prototyping-example.jpg" // Замени с пътя до твоята снимка за прототипиране
+                alt="Пример за 3D принтиран прототип"
+                fill // Кара снимката да запълни родителския контейнер
+                style={{ objectFit: 'cover' }} // Еквивалент на Tailwind object-cover
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Оптимизация за различни размери на екрана
+                className="transition-transform duration-300 hover:scale-105" // Добавен лек hover ефект
+              />
+            </div>
           </div>
-          <div className="bg-white p-8 rounded-lg shadow-lg">
+
+          <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center"> {/* Добавих items-center */}
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Производство на крайни продукти</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-6 text-center"> {/* Добавих text-center и mb-6 */}
               От единични бройки до малки и големи серии, ние принтираме висококачествени крайни продукти, отговарящи на вашите спецификации.
             </p>
+            {/* Добавяне на снимка за Производство на крайни продукти */}
+            <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-lg shadow-md">
+              <Image
+                src="/images/final-product-example.jpg" // Замени с пътя до твоята снимка за крайни продукти
+                alt="Пример за 3D принтиран краен продукт"
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -51,7 +74,6 @@ export default function HomePage() {
           <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
             Превърнете идеите си в реалност с нас
           </h2>
-          {/* Махнахме lg:justify-items-center от грида, защото сега позиционираме елемента директно */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {/* Елемент 1: От Идея до Готов Продукт */}
             <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -96,7 +118,6 @@ export default function HomePage() {
                 От скица до завършен 3D модел, нашите експерти ще реализират вашите идеи с прецизност, използвайки SolidWorks и Fusion 360.
               </p>
             </div>
-
           </div>
         </div>
       </section>

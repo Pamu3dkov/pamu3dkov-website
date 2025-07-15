@@ -1,6 +1,7 @@
 // app/services/page.tsx
 import type { Metadata } from 'next';
-import Link from 'next/link'; // <-- Добави този ред!
+import Link from 'next/link';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Нашите 3D Принтиране Услуги - Прототипиране и Производство',
@@ -14,8 +15,21 @@ export default function ServicesPage() {
         Нашите Услуги за 3D Принтиране
       </h1>
 
+      {/* Секция: Прототипиране */}
       <section className="mb-12 bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">Прототипиране</h2>
+        {/* Контейнер за снимката на Прототипиране - като на началната страница "Какво предлагаме?" */}
+        {/* Адаптираме ширината да е ограничена и височината да е същата като на началната страница */}
+        <div className="relative w-full max-w-lg mx-auto h-64 md:h-80 overflow-hidden rounded-lg shadow-md mb-6">
+          <Image
+            src="/images/prototyping-service.jpg" // <-- ЗАМЕНИ ТОЗИ ПЪТ
+            alt="Пример за 3D принтиран прототип"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Оптимизация за различни размери на екрана
+            className="transition-transform duration-300 hover:scale-105"
+          />
+        </div>
         <p className="text-lg text-gray-700 mb-4">
           Превърнете вашите иновативни идеи в реални, функционални прототипи. Услугата ни за прототипиране ви позволява бързо да тествате дизайна, формата и функцията на вашите продукти, преди да инвестирате в скъпо масово производство. Ние работим в тясно сътрудничество с вас, за да гарантираме, че всеки прототип отговаря на вашите точни спецификации и очаквания.
         </p>
@@ -27,8 +41,20 @@ export default function ServicesPage() {
         </ul>
       </section>
 
+      {/* Секция: Производство на крайни продукти */}
       <section className="mb-12 bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">Производство на крайни продукти</h2>
+        {/* Контейнер за снимката на Крайни продукти */}
+        <div className="relative w-full max-w-lg mx-auto h-64 md:h-80 overflow-hidden rounded-lg shadow-md mb-6">
+          <Image
+            src="/images/final-product-service.jpg" // <-- ЗАМЕНИ ТОЗИ ПЪТ
+            alt="Пример за 3D принтиран краен продукт"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="transition-transform duration-300 hover:scale-105"
+          />
+        </div>
         <p className="text-lg text-gray-700 mb-4">
           Независимо дали имате нужда от единична бройка или малка серия от крайни продукти, ние предлагаме висококачествено 3D принтиране, което отговаря на индустриалните стандарти. Използваме различни материали, за да осигурим издръжливост, прецизност и естетика на вашите готови изделия.
         </p>
@@ -40,8 +66,20 @@ export default function ServicesPage() {
         </ul>
       </section>
 
+      {/* Секция: 3D Моделиране със SolidWorks и Fusion 360 */}
       <section className="bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">3D Моделиране със SolidWorks и Fusion 360</h2>
+        {/* Контейнер за снимката на 3D Моделиране */}
+        <div className="relative w-full max-w-lg mx-auto h-64 md:h-80 overflow-hidden rounded-lg shadow-md mb-6">
+          <Image
+            src="/images/3d-modeling-service.jpg" // <-- ЗАМЕНИ ТОЗИ ПЪТ
+            alt="Пример за 3D модел в SolidWorks или Fusion 360"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="transition-transform duration-300 hover:scale-105"
+          />
+        </div>
         <p className="text-lg text-gray-700 mb-4">
           Основата на всеки успешен 3D принтиран обект е неговият модел. Ние използваме водещи CAD софтуери като SolidWorks и Fusion 360, за да създаваме прецизни, оптимизирани и готови за принтиране 3D модели. Независимо дали имате скица, идея или нужда от реверсивен инженеринг, ние можем да превърнем вашата концепция в детайлен цифров модел.
         </p>

@@ -22,14 +22,15 @@ export default function RootLayout({
     <html lang="bg">
       <body className={inter.className}>
         {/* ---- Начало на "Бруталния" Header ---- */}
-        <header className="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-4 shadow-xl">
+        {/* Добавени класове: sticky top-0 z-50 w-full */}
+        <header className="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-4 shadow-xl sticky top-0 z-50 w-full">
           <nav className="container mx-auto flex justify-between items-center py-2">
             {/* Лого/Име на бранда */}
             <Link
               href="/"
               className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400
-                         hover:from-blue-300 hover:to-cyan-300 transition duration-300 ease-in-out
-                         hover:animate-shake tracking-wider"
+                               hover:from-blue-300 hover:to-cyan-300 transition duration-300 ease-in-out
+                               hover:animate-shake tracking-wider"
             >
               Pamu
               <span className="text-blue-200">3D</span>
@@ -105,7 +106,8 @@ export default function RootLayout({
         {/* ---- Край на "Бруталния" Header ---- */}
 
         {/* Main Content */}
-        <main className="min-h-screen">
+        {/* Добавих mt-24 за да компенсира височината на sticky хедъра и съдържанието да не се скрива под него */}
+        <main className="min-h-screen mt-24">
           {children}
         </main>
 
