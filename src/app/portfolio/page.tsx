@@ -42,6 +42,15 @@ const portfolioItems = [
     category: 'Проектирани продукти',
     objectPosition: 'object-center', // Добавено свойство: центрира снимката по подразбиране
   },
+  {
+   id: 5,
+    name: 'Tръба на монетник (Вендинг)',
+    description: 'Специализирана резервна част, проектирана със SolidWorks.',
+    smallImage: '/images/part2.jpg',
+    largeImage: '/images/part2.jpg',
+    category: 'Проектирани продукти',
+    objectPosition: 'object-center', // Добавено свойство: центрира снимката по подразбиране
+  },
   // Добави тук още обекти със снимките от твоя public/images/ папка.
   // За всяка снимка можеш да зададеш custom objectPosition.
   // Ето пример за нова снимка с bottom позиция:
