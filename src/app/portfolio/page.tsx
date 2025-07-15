@@ -34,7 +34,7 @@ const portfolioItems = [
     objectPosition: 'object-center', // Добавено свойство: центрира снимката по подразбиране
   },
   {
-  id: 3,
+  id: 4,
     name: 'Фасунга за фар на кола',
     description: 'Специализирана резервна част, проектирана със SolidWorks.',
     smallImage: '/images/part1.jpg',
