@@ -42,10 +42,14 @@ export async function POST(request: Request) {
     // Връщане на успешен JSON отговор
     return NextResponse.json({ message: 'Имейлът е изпратен успешно!' }, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error: unknown) { // Променено от 'any' на 'unknown'
     // Логване на грешката на сървъра
     console.error('Грешка при обработка на имейл в API рута:', error);
+
+    // Безопасно извличане на съобщението за грешка
+    const errorMessage = error instanceof Error ? error.message : 'Неизвестна сървърна грешка.';
+
     // Връщане на грешка към клиента
-    return NextResponse.json({ message: 'Грешка при изпращане на имейл.', error: error.message || 'Неизвестна сървърна грешка.' }, { status: 500 });
+    return NextResponse.json({ message: 'Грешка при изпращане на имейл.', error: errorMessage }, { status: 500 });
   }
 }
