@@ -1,43 +1,39 @@
 // src/app/portfolio/page.tsx
-'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи react-modal-image и другите интерактивности.
+'use client';
 
-// *** ПРОМЯНА ТУК: Добавяме dynamic от 'next/dynamic' ***
-import dynamic from 'next/dynamic';
+// ИМПОРТИРАЙ НОВАТА БИБЛИОТЕКА И НЕЙНИЯ CSS
+import ImageGallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css'; // ЗАДЪЛЖИТЕЛНО: Импортирай CSS стиловете за галерията
 
-// *** ПРОМЯНА ТУК: Използваме dynamic импорт за ModalImage ***
-// Това кара ModalImage да се зарежда само на клиентската страна (браузъра)
-// и да не се опитва да се рендва по време на Server-Side Rendering (SSR).
-const ModalImage = dynamic(() => import('react-modal-image'), { ssr: false });
-
+// Дефиниция на елементите в портфолиото, адаптирани за react-image-gallery
+// 'react-image-gallery' използва 'original' за голямата снимка и 'thumbnail' за малката.
 const portfolioItems = [
   {
-    id: 1,
-    name: 'Прототип на AirSoft',
-    description: 'Функционален прототип, принтиран за тестване на сглобката и ергономията.',
-    smallImage: '/images/airsoft-replica.jpg', // <-- Път към малката (preview) снимка
-    largeImage: '/images/airsoft-replica.jpg', // <-- Път към голямата (пълноразмерна) снимка
-    category: 'Прототипи',
+    original: '/images/airsoft-replica.jpg', // Път към голямата (пълноразмерна) снимка
+    thumbnail: '/images/airsoft-replica.jpg', // Път към малката (thumbnail) снимка
+    description: 'Функционален прототип, принтиран за тестване на сглобката и ергономията.', // Описание, което ще се показва под снимката в галерията
+    alt: 'Прототип на AirSoft', // Алтернативен текст за достъпност
+    originalTitle: 'Прототип на AirSoft', // Титла, която може да се показва в лайтбокса
   },
   {
-    id: 2,
-    name: 'Персонализирана декоративна фигурка',
+    original: '/images/drakon.jpg',
+    thumbnail: '/images/drakon.jpg',
     description: 'Детайлна фигурка, принтирана като краен продукт за подарък.',
-    smallImage: '/images/drakon.jpg',
-    largeImage: '/images/drakon.jpg',
-    category: 'Крайни продукти',
+    alt: 'Персонализирана декоративна фигурка',
+    originalTitle: 'Персонализирана декоративна фигурка',
   },
   {
-    id: 3,
-    name: 'Резервна част за AirSoft',
+    original: '/images/airsoft-parts.jpg',
+    thumbnail: '/images/airsoft-parts.jpg',
     description: 'Специализирана резервна част, проектирана със SolidWorks и принтирана за конкретна AirSoft реплика.',
-    smallImage: '/images/airsoft-parts.jpg',
-    largeImage: '/images/airsoft-parts.jpg',
-    category: 'Крайни продукти',
+    alt: 'Резервна част за AirSoft',
+    originalTitle: 'Резервна част за AirSoft',
   },
-  // Добавете още обекти със снимките, които си поставил в public/images/
+  // Добави още обекти със снимките, които си поставил в public/images/
+  // Не забравяй да използваш 'original' и 'thumbnail' за пътищата към снимките.
   // Препоръчително: Ако имаш по-големи оригинални файлове, използвай:
-  // smallImage: '/images/portfolio/thumb-airsoft-replica.jpg' // По-малка версия за бързо зареждане
-  // largeImage: '/images/portfolio/full-airsoft-replica.jpg'  // Голяма версия за модала
+  // thumbnail: '/images/portfolio/thumb-airsoft-replica.jpg' // По-малка версия за бързо зареждане
+  // original: '/images/portfolio/full-airsoft-replica.jpg'  // Голяма версия за модала
 ];
 
 export default function PortfolioPage() {
@@ -50,42 +46,22 @@ export default function PortfolioPage() {
         Разгледайте някои от нашите успешно реализирани проекти за 3D принтиране и моделиране.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {portfolioItems.map((item) => (
-          // Основен контейнер за елемента от портфолиото
-          <div
-            key={item.id}
-            className="group relative bg-white rounded-lg shadow-lg overflow-hidden
-                       h-80 md:h-96" // Фиксирана височина за картата
-          >
-            {/* Изображението: Сега използваме ModalImage */}
-            <div className="absolute inset-0 w-full h-full">
-              <ModalImage
-                small={item.smallImage} // <-- Път към малката (preview) снимка
-                large={item.largeImage} // <-- Път към голямата (пълноразмерна) снимка
-                alt={item.name}
-                hideDownload={true} // Може да скриеш бутона за сваляне
-                hideZoom={false}    // Може да оставиш бутона за zoom
-                // Tailwind класове за стилизиране на *превю* изображението
-                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-              />
-              {/* Overlay, който се появява при hover */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
-            </div>
-
-            {/* Текстовият блок: Позициониран в долната част, ще избледнява при hover */}
-            <div
-              className="absolute bottom-0 left-0 right-0 p-6 bg-white z-20
-                         transition-opacity duration-300 ease-in-out group-hover:opacity-0"
-            >
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">{item.name}</h2>
-              <p className="text-gray-600 mb-3">{item.description}</p>
-              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                {item.category}
-              </span>
-            </div>
-          </div>
-        ))}
+      {/* Основният компонент на галерията от react-image-gallery */}
+      {/* Забележка: Старият grid layout с индивидуални карти е премахнат,
+          за да се покаже една цяла галерия, както е предвидено от react-image-gallery. */}
+      <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden">
+        <ImageGallery
+          items={portfolioItems} // Подаваме масива с елементи на галерията
+          showPlayButton={false} // Скрива бутона за автоматично плейване
+          showFullscreenButton={true} // Показва бутон за цял екран
+          showNav={true} // Показва стрелки за навигация
+          showBullets={true} // Показва точки за навигация под галерията
+          showThumbnails={true} // Показва малките превюта отдолу
+          thumbnailPosition="bottom" // Позиционира thumb-овете отдолу
+          lazyLoad={true} // Активира лениво зареждане на изображенията
+          // Можеш да добавиш още опции според документацията на react-image-gallery
+          // Например: autoPlay={true}, slideInterval={3000}, etc.
+        />
       </div>
     </div>
   );
