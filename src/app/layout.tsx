@@ -1,30 +1,30 @@
 // src/app/layout.tsx
-'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Добавяме този ред, защото използваме useState и интерактивност
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи интерактивността с мобилното меню.
 
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
-import { useState } from 'react'; // <-- Добавяме импорт за useState
+import { useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 // !!! ВАЖНО: Блокът "export const metadata" е премахнат оттук.
-// !!! Трябва да го преместите в src/app/head.tsx (вижте инструкциите по-долу).
+// !!! Той трябва да бъде във src/app/head.tsx (виж следващия файл).
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // <-- Ново състояние за мобилното меню
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <html lang="bg">
       <body className={inter.className}>
-        {/* ---- Начало на "Бруталния" Header (Обновен) ---- */}
+        {/* ---- Начало на "Бруталния" Header ---- */}
         <header className="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-4 shadow-xl">
           <nav className="container mx-auto flex justify-between items-center py-2">
-            {/* Лого/Име на бранда с поклащащ ефект и цветно "3D" */}
+            {/* Лого/Име на бранда */}
             <Link
               href="/"
               className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400
@@ -37,13 +37,12 @@ export default function RootLayout({
             </Link>
 
             {/* Хамбургер бутон за мобилни устройства */}
-            <div className="md:hidden"> {/* Видим само на екрани по-малки от 'md' */}
+            <div className="md:hidden">
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} // При клик променя състоянието
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-white focus:outline-none"
-                aria-label="Toggle mobile menu" // Добавяме за достъпност
+                aria-label="Toggle mobile menu"
               >
-                {/* Икона за хамбургер (три черти) или затваряне (Х) */}
                 {isMobileMenuOpen ? (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -56,8 +55,8 @@ export default function RootLayout({
               </button>
             </div>
 
-            {/* Десктоп навигационни линкове (скрити на малки екрани) */}
-            <ul className="hidden md:flex space-x-8 text-lg"> {/* Скрити на екрани по-малки от 'md' */}
+            {/* Десктоп навигационни линкове */}
+            <ul className="hidden md:flex space-x-8 text-lg">
               <li>
                 <Link href="/" className="relative group overflow-hidden">
                   <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Начало</span>
@@ -85,7 +84,7 @@ export default function RootLayout({
             </ul>
           </nav>
 
-          {/* Мобилно меню (показва се/скрива се в зависимост от isMobileMenuOpen) */}
+          {/* Мобилно меню */}
           {isMobileMenuOpen && (
             <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
               <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">

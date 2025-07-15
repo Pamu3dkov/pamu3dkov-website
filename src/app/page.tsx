@@ -1,110 +1,86 @@
-// src/app/page.tsx
-import Link from 'next/link';
-import Image from 'next/image'; // Не забравяй да импортнеш Image
+// src/app/portfolio/page.tsx
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи react-modal-image.
 
-export default function HomePage() {
+import ModalImage from 'react-modal-image'; // <-- ИМПОРТ ЗА ГАЛЕРИЯТА
+
+const portfolioItems = [
+  {
+    id: 1,
+    name: 'Прототип на AirSoft',
+    description: 'Функционален прототип, принтиран за тестване на сглобката и ергономията.',
+    smallImage: '/images/airsoft-replica.jpg', // <-- Път към малката (preview) снимка
+    largeImage: '/images/airsoft-replica.jpg', // <-- Път към голямата (пълноразмерна) снимка
+    category: 'Прототипи',
+  },
+  {
+    id: 2,
+    name: 'Персонализирана фигурка',
+    description: 'Детайлна фигурка, принтирана като краен продукт за подарък.',
+    smallImage: '/images/drakon.jpg',
+    largeImage: '/images/drakon.jpg',
+    category: 'Крайни продукти',
+  },
+  {
+    id: 3,
+    name: 'Резервна част за AirSoft',
+    description: 'Специализирана резервна част, проектирана със SolidWorks и принтирана за конкретна AirSoft реплика.',
+    smallImage: '/images/airsoft-parts.jpg',
+    largeImage: '/images/airsoft-parts.jpg',
+    category: 'Крайни продукти',
+  },
+  // Добавете още обекти със снимките, които си поставил в public/images/
+  // Препоръчително: Ако имаш по-големи оригинални файлове, използвай:
+  // smallImage: '/images/portfolio/thumb-airsoft-replica.jpg' // По-малка версия за бързо зареждане
+  // largeImage: '/images/portfolio/full-airsoft-replica.jpg'  // Голяма версия за модала
+];
+
+export default function PortfolioPage() {
   return (
-    <div className="flex flex-col items-center justify-center py-2">
-      {/* Hero Section */}
-      <section className="w-full text-center py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-lg">
-        <h1 className="text-5xl font-bold mb-4">
-          Вашата Идея, Нашата 3D Реализация
-        </h1>
-        <p className="text-xl mb-8 max-w-3xl mx-auto">
-          Ние предлагаме професионални услуги за 3D принтиране, от прототипиране до производство на крайни продукти, базирани на прецизни 3D модели, създадени със SolidWorks и Fusion 360.
-        </p>
+    <div className="container mx-auto p-4 py-8">
+      <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+        Нашето Портфолио
+      </h1>
+      <p className="text-xl text-gray-700 mb-12 text-center max-w-3xl mx-auto">
+        Разгледайте някои от нашите успешно реализирани проекти за 3D принтиране и моделиране.
+      </p>
 
-        <div className="flex justify-center space-x-4 mb-12">
-          <Link href="/services" className="bg-white text-blue-600 hover:bg-gray-200 font-bold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out shadow-lg">
-            Нашите Услуги
-          </Link>
-          <Link href="/contact" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out">
-            Свържете се с нас
-          </Link>
-        </div>
-      </section>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {portfolioItems.map((item) => (
+          // Основен контейнер за елемента от портфолиото
+          <div
+            key={item.id}
+            className="group relative bg-white rounded-lg shadow-lg overflow-hidden
+                       h-80 md:h-96" // Фиксирана височина за картата
+          >
+            {/* Изображението: Сега използваме ModalImage */}
+            <div className="absolute inset-0 w-full h-full">
+              <ModalImage
+                small={item.smallImage} // <-- Път към малката (preview) снимка
+                large={item.largeImage} // <-- Път към голямата (пълноразмерна) снимка
+                alt={item.name}
+                hideDownload={true} // Може да скриеш бутона за сваляне
+                hideZoom={false}    // Може да оставиш бутона за zoom
+                // Tailwind класове за стилизиране на *превю* изображението
+                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+              />
+              {/* Overlay, който се появява при hover */}
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
+            </div>
 
-      {/* Секция "Какво предлагаме?" */}
-      <section className="mt-16 bg-gray-50 py-12 px-4 w-full">
-        <h2 className="text-4xl font-bold text-gray-800 mb-10 text-center">
-          Какво предлагаме?
-        </h2>
-        <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Прототипиране</h3>
-            <p className="text-gray-600">
-              Превърнете вашите концепции в реални, осезаеми прототипи. Идеален начин да тествате дизайна си преди масово производство.
-            </p>
+            {/* Текстовият блок: Позициониран в долната част, ще избледнява при hover */}
+            <div
+              className="absolute bottom-0 left-0 right-0 p-6 bg-white z-20
+                         transition-opacity duration-300 ease-in-out group-hover:opacity-0"
+            >
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">{item.name}</h2>
+              <p className="text-gray-600 mb-3">{item.description}</p>
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                {item.category}
+              </span>
+            </div>
           </div>
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Производство на крайни продукти</h3>
-            <p className="text-gray-600">
-              От единични бройки до малки и големи серии, ние принтираме висококачествени крайни продукти, отговарящи на вашите спецификации.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* НОВА СЕКЦИЯ: Нашите Предимства / Защо да изберете нас */}
-      <section className="py-16 bg-gray-100 w-full">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
-            Превърнете идеите си в реалност с нас
-          </h2>
-          {/* ПРОМЯНА: Добавен lg:justify-items-center за центриране на последния елемент на големи екрани */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:justify-items-center">
-            {/* Елемент 1: От Идея до Готов Продукт */}
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-              <div className="w-20 h-20 mb-4 flex items-center justify-center bg-blue-100 rounded-full">
-                {/* Използваме Next.js Image компонента за SVG. Пътят е относителен спрямо public папката. */}
-                <Image src="/icons/lightbulb.svg" alt="От Идея до Готов Продукт" width={40} height={40} className="text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">От Идея до Готов Продукт</h3>
-              <p className="text-gray-600">
-                Работим с вас, за да превърнем вашите концепции, скици или файлове в осезаеми 3D обекти.
-              </p>
-            </div>
-
-            {/* Елемент 2: Бързо Прототипиране */}
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-              <div className="w-20 h-20 mb-4 flex items-center justify-center bg-green-100 rounded-full">
-                {/* Използваме Next.js Image компонента за SVG. Пътят е относителен спрямо public папката. */}
-                <Image src="/icons/rocket.svg" alt="Бързо Прототипиране" width={40} height={40} className="text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Бързо Прототипиране</h3>
-              <p className="text-gray-600">
-                Създавайте бързи и ефективни прототипи, за да тествате и усъвършенствате вашите дизайни преди производство.
-              </p>
-            </div>
-
-            {/* Елемент 3: Персонализация и Уникалност */}
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-              <div className="w-20 h-20 mb-4 flex items-center justify-center bg-purple-100 rounded-full">
-                {/* Използваме Next.js Image компонента за SVG. Пътят е относителен спрямо public папката. */}
-                <Image src="/icons/customize.svg" alt="Персонализация и Уникалност" width={40} height={40} className="text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Персонализация и Уникалност</h3>
-              <p className="text-gray-600">
-                Принтирайте персонализирани подаръци, части или арт инсталации, които да отразяват вашия стил.
-              </p>
-            </div>
-
-            {/* Елемент 4: Професионален 3D Дизайн */}
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 lg:col-start-2">
-              <div className="w-20 h-20 mb-4 flex items-center justify-center bg-yellow-100 rounded-full">
-                {/* Използваме Next.js Image компонента за SVG. Пътят е относителен спрямо public папката. */}
-                <Image src="/icons/design.svg" alt="Професионален 3D Дизайн" width={40} height={40} className="text-yellow-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Професионален 3D Дизайн</h3>
-              <p className="text-gray-600">
-                От скица до завършен 3D модел, нашите експерти ще реализират вашите идеи с прецизност, използвайки SolidWorks и Fusion 360.
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
+        ))}
+      </div>
     </div>
   );
 }
