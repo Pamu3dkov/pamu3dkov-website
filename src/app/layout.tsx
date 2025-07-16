@@ -1,159 +1,145 @@
-// src/app/obshti-uslovia/page.tsx
+// src/app/layout.tsx
+'use client'; // <-- ЗАДЪЛЖИТЕЛНО: Този ред остава, за да работи интерактивността с мобилното меню.
 
-import * as React from 'react'; // Използвай * as React за някои TS конфигурации, или само React ако работи директно
-// Заглавието и мета описанието в App Router се дефинират чрез `export const metadata`
-import type { Metadata } from 'next'; // Импортирай Metadata за типове
+import './globals.css';
+import { Inter } from 'next/font/google';
+import Link from 'next/link';
+import { useState } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Общи условия - Pamu3dkov',
-  description: 'Общи условия за използване на уебсайта Pamu3dkov.com',
-};
+const inter = Inter({ subsets: ['latin'] });
 
-function TermsAndConditionsPage() {
-  const currentDate = new Date().toLocaleDateString('bg-BG', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+// !!! ВАЖНО: Блокът "export const metadata" е премахнат оттук.
+// !!! Той трябва да бъде във src/app/head.tsx (виж следващия файл).
+// Ако все още нямаш src/app/head.tsx, можеш да дефинираш метаданните директно в page.tsx на всяка страница
+// или да създадеш src/app/head.tsx и да преместиш метаданните там.
+// Забележка: В Next.js 13/14 App Router, `metadata` може да се експортира директно от `layout.tsx`
+// или от `page.tsx` на конкретните страници. Ако искаш глобални метаданни, може да ги върнеш тук.
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const currentYear = new Date().getFullYear(); // За авторските права във фуутъра
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-24"> {/* mt-24 за да не се скрива под хедъра */}
-      {/*
-        Забележка: В App Router, <Head> от next/head вече не е основният начин за мета данни.
-        Използвай `export const metadata` както е показано по-горе.
-        Оставям <Head> компонента за съвместимост, но може да го премахнеш.
-      */}
-      {/*
-      <Head>
-        <title>Общи условия - Pamu3dkov</title>
-        <meta name="description" content="Общи условия за използване на уебсайта Pamu3dkov.com" />
-      </Head>
-      */}
+    <html lang="bg">
+      <body className={inter.className}>
+        {/* ---- Начало на "Бруталния" Header ---- */}
+        {/* Добавени класове: sticky top-0 z-50 w-full */}
+        <header className="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-4 shadow-xl sticky top-0 z-50 w-full">
+          <nav className="container mx-auto flex justify-between items-center py-2">
+            {/* Лого/Име на бранда */}
+            <Link
+              href="/"
+              className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400
+                                       hover:from-blue-300 hover:to-cyan-300 transition duration-300 ease-in-out
+                                       hover:animate-shake tracking-wider"
+            >
+              Pamu
+              <span className="text-blue-200">3D</span>
+              kov
+            </Link>
 
-      <h1 className="text-4xl font-bold text-center mb-8">Общи условия</h1>
+            {/* Хамбургер бутон за мобилни устройства */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white focus:outline-none"
+                aria-label="Toggle mobile menu"
+              >
+                {isMobileMenuOpen ? (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                )}
+              </button>
+            </div>
 
-      <p className="text-gray-600 text-center mb-12">
-        **Дата на влизане в сила:** {currentDate}
-      </p>
+            {/* Десктоп навигационни линкове */}
+            <ul className="hidden md:flex space-x-8 text-lg">
+              <li>
+                <Link href="/" className="relative group overflow-hidden">
+                  <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Начало</span>
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="relative group overflow-hidden">
+                  <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Услуги</span>
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/portfolio" className="relative group overflow-hidden">
+                  <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Портфолио</span>
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="relative group overflow-hidden">
+                  <span className="relative z-10 hover:text-blue-300 transition duration-300 ease-in-out">Контакти</span>
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </Link>
+              </li>
+            </ul>
+          </nav>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">1. Общи положения</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Настоящите Общи условия (наричани по-долу „ОУ“) уреждат отношенията между [**ТВОЕТО ПЪЛНО ИМЕ, напр. Иван Георгиев Петров**], с постоянен адрес [**ТВОЯТ ПОСТОЯНЕН АДРЕС, напр. гр. София, ул. "Примерна" № 10**], адрес на електронна поща [**ТВОЙ ИМЕЙЛ**], телефонен номер [**ТВОЙ ТЕЛЕФОН**] (наричан по-долу „Доставчик“), от една страна, и всеки посетител и ползвател на уебсайта Pamu3dkov.com (наричан по-долу „Потребител“), от друга страна.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Уебсайтът Pamu3dkov.com (наричан по-долу „Сайта“) е онлайн платформа, създадена с цел представяне на услуги в областта на 3D принтирането, показване на портфолио и предоставяне на възможност за контакт с Доставчика.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Всяко използване на Сайта от Потребителя (включително, но не само, разглеждане на съдържание, попълване на контактна форма) означава, че Потребителят е прочел, разбрал и приел настоящите ОУ. Ако Потребителят не е съгласен с ОУ, той следва да преустанови използването на Сайта.
-        </p>
-      </section>
+          {/* Мобилно меню */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Начало
+              </Link>
+              <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Услуги
+              </Link>
+              <Link href="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Портфолио
+              </Link>
+              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+                Контакти
+              </Link>
+            </div>
+          )}
+        </header>
+        {/* ---- Край на "Бруталния" Header ---- */}
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">2. Услуги, предлагани чрез Сайта</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Доставчикът предлага услуги, свързани с 3D принтиране, дизайн и прототипиране, както и други съпътстващи дейности, представени в портфолиото на Сайта.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          <strong>Цените за предлаганите услуги не са фиксирани на Сайта и се определят индивидуално</strong> за всяка конкретна поръчка или проект. Потребителят ще получи персонализирана оферта след запитване и предоставяне на необходимата информация за проекта.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Процесът на предоставяне на услуги обикновено включва:
-        </p>
-        <ul className="list-disc list-inside text-gray-700 ml-4">
-          <li>Изпращане на запитване от Потребителя чрез контактната форма или директен контакт.</li>
-          <li>Предоставяне на необходими файлове и спецификации от Потребителя.</li>
-          <li>Изготвяне и изпращане на индивидуална оферта от Доставчика.</li>
-          <li>Потвърждение на офертата от Потребителя.</li>
-          <li>Изпълнение на услугата от Доставчика.</li>
-          <li>Плащане и доставка/получаване на готовата продукция.</li>
-        </ul>
-      </section>
+        {/* Main Content */}
+        {/* Добавих mt-24 за да компенсира височината на sticky хедъра и съдържанието да не се скрива под него */}
+        <main className="min-h-screen mt-24">
+          {children}
+        </main>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">3. Използване на Сайта</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Потребителят има право да разглежда съдържанието на Сайта, да използва контактната форма за запитвания и да се информира за предлаганите услуги.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Потребителят се задължава да не използва Сайта за незаконни или неправомерни цели, включително, но не само:
-        </p>
-        <ul className="list-disc list-inside text-gray-700 ml-4">
-          <li>Копиране, възпроизвеждане, разпространение или публикуване на съдържание от Сайта без изрично писмено съгласие на Доставчика.</li>
-          <li>Опит за достъп до данни или системи, до които няма право.</li>
-          <li>Разпространение на вредоносен софтуер или вируси.</li>
-          <li>Нарушаване на правата на интелектуална собственост на Доставчика или трети страни.</li>
-        </ul>
-      </section>
+        {/* Footer Section */}
+        <footer className="bg-gray-800 text-white p-4 text-center">
+          <div className="container mx-auto">
+            <p>&copy; {currentYear} Pamu3dkov. Всички права запазени.</p>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">4. Авторски права и интелектуална собственост</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Цялото съдържание на Сайта, включително текст, снимки, графики, дизайн, софтуер и други материали, е собственост на Доставчика или на негови партньори/клиенти (когато е посочено) и е защитено от Закона за авторското право и сродните му права.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Всяко неразрешено използване на съдържанието на Сайта, включително копиране, възпроизвеждане, промяна, разпространение или публично показване, без предварително писмено съгласие на Доставчика, е строго забранено и представлява нарушение на закона.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Портфолиото, представено на Сайта, включва проекти и снимки, които демонстрират работата на Доставчика. Всякакви права върху дизайн или 3D модели, предоставени от клиенти за принтиране, остават собственост на клиента, освен ако не е уговорено друго.
-        </p>
-      </section>
+            {/* --- ДОБАВЕНО: Правни линкове във фуутъра --- */}
+            <div className="mt-4 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm">
+              {/* Използваме legacyBehavior, тъй като Link е с className директно на себе си */}
+              <Link href="/politika-za-poveritelnost" legacyBehavior>
+                <a className="hover:text-blue-400 transition-colors duration-300">
+                  Политика за поверителност
+                </a>
+              </Link>
+              <Link href="/obshti-uslovia" legacyBehavior>
+                <a className="hover:text-blue-400 transition-colors duration-300">
+                  Общи условия
+                </a>
+              </Link>
+            </div>
+            {/* --- КРАЙ НА ДОБАВЕНИЯ КОД --- */}
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">5. Защита на личните данни (Политика за поверителност)</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Доставчикът събира и обработва лични данни на Потребители, предоставени чрез контактната форма (като име, имейл адрес, телефон и съобщение), с цел отговор на запитвания, предоставяне на информация за услугите и изпълнение на потенциални поръчки.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Подробна информация за начина, по който Доставчикът събира, използва, съхранява и защитава личните данни, както и за правата на Потребителите съгласно Общия регламент за защита на данните (ЕС) 2016/679 (GDPR), е налична в отделен документ – **Политика за поверителност**, която е неразделна част от настоящите ОУ и може да бъде намерена на следния линк: <a href="/politika-za-poveritelnost" className="text-blue-500 hover:underline">Политика за поверителност</a>.
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">6. Ограничаване на отговорността</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Доставчикът полага максимални усилия да осигури точност, пълнота и актуалност на информацията, публикувана на Сайта, но не гарантира липсата на неточности или грешки.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Доставчикът не носи отговорност за преки или косвени щети, причинени от използването или невъзможността за използване на Сайта или неговото съдържание.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Доставчикът не носи отговорност за технически проблеми, които могат да възникнат извън неговия контрол (напр. проблеми с интернет връзката, хостинг доставчика, Vercel платформата).
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">7. Промени в Общите условия</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Доставчикът си запазва правото да променя настоящите Общи условия по всяко време. Промените ще бъдат публикувани на Сайта и ще влизат в сила от датата на публикуването им, освен ако изрично не е посочено друго.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Отговорност на Потребителя е редовно да преглежда ОУ за промени. Продължаващото използване на Сайта след публикуване на промени означава приемане на тези промени.
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">8. Приложимо право и разрешаване на спорове</h2>
-        <p className="text-gray-700 leading-relaxed">
-          За всички неуредени в настоящите ОУ въпроси се прилага действащото българско законодателство.
-        </p>
-        <p className="text-gray-700 leading-relaxed mt-2">
-          Всички спорове, възникнали между Доставчика и Потребителя във връзка с използването на Сайта и предоставянето на услуги, ще се разрешават чрез преговори между страните. Ако не бъде постигнато съгласие, спорът ще бъде отнесен за разрешаване пред компетентния български съд.
-        </p>
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">9. Заключителни разпоредби</h2>
-        <p className="text-gray-700 leading-relaxed">
-          Настоящите Общи условия влизат в сила от {currentDate}.
-        </p>
-      </section>
-
-      <div className="text-center text-gray-500 text-sm mt-12">
-        <p>Моля, обърнете внимание: Този документ е генериран от AI и не представлява правен съвет. <br/> Задължително се консултирайте с юрист.</p>
-      </div>
-    </div>
+          </div>
+        </footer>
+      </body>
+    </html>
   );
 }
-
-export default TermsAndConditionsPage;

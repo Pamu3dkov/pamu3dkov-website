@@ -149,9 +149,7 @@ function TermsAndConditionsPage() {
         </p>
       </section>
 
-      <div className="text-center text-gray-500 text-sm mt-12">
-        <p>Моля, обърнете внимание: Този документ е генериран от AI и не представлява правен съвет. <br/> Задължително се консултирайте с юрист.</p>
-      </div>
+      
     </div>
   );
 }
