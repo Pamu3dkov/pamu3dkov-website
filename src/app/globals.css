@@ -1,26 +1,34 @@
+/* src/app/globals.css */
+
+/* Импортира Tailwind CSS директивите */
 @import "tailwindcss";
 
+/* Задава светла цветова схема за целия документ, игнорирайки системните предпочитания */
+html {
+  color-scheme: light;
+}
+
+/* Дефинира цветови променливи за светъл режим */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Чисто бял фон */
+  --foreground: #171717; /* Тъмен текст */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* !!! ВАЖНО: Блокът @media (prefers-color-scheme: dark) е премахнат,
+   за да се гарантира, че сайтът винаги е в светъл режим. */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Прилага дефинираните цветови променливи към тялото на документа */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; /* Запазва твоя шрифт */
 }
+
+/*
+  Ако имаш други собствени CSS стилове, добави ги тук.
+  Например:
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+*/
